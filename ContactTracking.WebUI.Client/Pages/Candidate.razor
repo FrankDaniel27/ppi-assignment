@@ -1,0 +1,127 @@
+﻿@page "/candidate"
+@using System.ComponentModel.DataAnnotations
+@using ContactTracking.Application.Common
+@using ContactTracking.Application.Features.Candidates
+@using ContactTracking.Domain.Models
+@using ContactTracking.WebUI.Client.Extensions
+@using Newtonsoft.Json
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg">
+			<h3>Candidate Entry</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-4">
+			<TelerikForm EditContext="@editContext" OnValidSubmit="@OnValidSubmitHandler">
+				<FormValidation>
+					<DataAnnotationsValidator />
+				</FormValidation>
+				<FormItems>
+					<FormItem Field="@nameof(Person.FirstName)"
+							  EditorType="@FormEditorType.TextBox"
+							  LabelText="First name">
+					</FormItem>
+					<FormItem Field="@nameof(Person.LastName)"
+							  EditorType="@FormEditorType.TextBox"
+							  LabelText="Last name">
+					</FormItem>
+					<FormItem Field="@nameof(Person.Email)"
+							  EditorType="@FormEditorType.TextBox"
+							  LabelText="Email">
+					</FormItem>
+					<FormItem Field="@nameof(Person.PhoneNumber)"
+							  EditorType="@FormEditorType.TextBox"
+							  LabelText="Phone Number">
+					</FormItem>
+					<FormItem Field="@nameof(Person.ResidentialZipCode)"
+							  EditorType="@FormEditorType.TextBox"
+							  LabelText="Residential Zip Code">
+					</FormItem>
+				</FormItems>
+			</TelerikForm>
+            <br />
+
+		</div>
+	</div>
+    <div class="row">
+        <div class="col-lg">
+            <h3>Candidates</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <TelerikGrid @ref="GridCandidates" Data="@Candidates"
+                         Pageable="true"
+                         Sortable="true"
+                         FilterMode="@GridFilterMode.FilterRow">
+                <GridColumns>
+                    <GridColumn Field="@nameof(Person.FirstName)" Width="200px" />
+                    <GridColumn Field="@nameof(Person.LastName)" Width="200px" />
+                    <GridColumn Field="@nameof(Person.Email)" Width="200px" />
+                    <GridColumn Field="@nameof(Person.PhoneNumber)" Width="200px" />
+                    <GridColumn Field="@nameof(Person.ResidentialZipCode)" Width="200px" />
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Inject]
+    public ICandidatesHandler CandidatesHandler { get; set; }
+
+    private TelerikGrid<Person> GridCandidates { get; set; }
+
+    List<Person> Candidates = new List<Person>();
+
+    EditContext? editContext { get; set; }
+
+    private Person PersonModel { get; set; } = new Person
+    {
+        FirstName = "",
+        LastName = "",
+        Email = "",
+        PhoneNumber = "",
+        ResidentialZipCode = ""
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCandidates();
+    }
+
+    public async Task GetCandidates()
+    {
+        var result = await CandidatesHandler.GetCandidates();
+        Candidates = result.Candidates;
+    }
+
+    public async Task OnValidSubmitHandler(EditContext editContext)
+    {
+        bool isFormValid = editContext.Validate();
+
+        if (isFormValid)
+        {
+            // if (!Candidates.Any(z => z.Email.Equals(PersonModel.Email)))
+            // {
+            var person = PersonModel.DeepCopy();
+            var success = await CandidatesHandler.AddCandidate(person);
+            if(success)
+            {
+                Candidates.Add(person);
+                GridCandidates.Rebind();
+            }
+                
+            // }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(PersonModel);
+        base.OnInitialized();
+    }     
+}
