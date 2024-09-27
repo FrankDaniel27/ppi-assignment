@@ -2,9 +2,9 @@
 This project demonstrats the Clean Archtecture pattern with the Repository Pattern using SQLite as the database. 
 I used Blazor with .NET 8 and Telerik as toolkits.
 All you have to do is clone the repo, run the cli command below and just launch the program. 
-When you run the migration command below, a database will be created and seed file will get loaded into it and will be located in your AppData folder, so be sure to delete it when you are done. 
+When you run the migration command below, a database will be created and a seed file will get loaded into it. The database will be located in your AppData folder, so be sure to delete it when you are done. The instructions are below. 
 
-# Project for Infrastructure components
+# Infrastructure Components
 ## Database Type
 SQLite
 
