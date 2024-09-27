@@ -54,8 +54,8 @@ public class CandidateRepository : ICandidateRepository, IDisposable
 
     public async Task<bool> InsertCandidate(Person person)
     {
-        await context.Candidates.AddAsync(person);
-
+        var res = await context.Candidates.AddAsync(person);
+     
         return true;
     }
 

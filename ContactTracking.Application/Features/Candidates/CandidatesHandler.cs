@@ -4,10 +4,9 @@ namespace ContactTracking.Application.Features.Candidates;
 
 public class CandidatesHandler(ICandidateRepository candidateRepository)  : ICandidatesHandler
 {
-    public async Task<bool> AddCandidate(Person person)
+    public bool AddCandidate(Person person)
     {
-        await candidateRepository.InsertCandidate(person);
-        await candidateRepository.Save();
+        candidateRepository.InsertCandidate(person);
 
         return true;
     }

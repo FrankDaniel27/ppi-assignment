@@ -107,7 +107,7 @@
             // if (!Candidates.Any(z => z.Email.Equals(PersonModel.Email)))
             // {
             var person = PersonModel.DeepCopy();
-            var success = await CandidatesHandler.AddCandidate(person);
+            var success = CandidatesHandler.AddCandidate(person);
             if(success)
             {
                 Candidates.Add(person);

@@ -1,6 +1,3 @@
 ﻿namespace ContactTracking.Application.Features.Users;
 
-public interface IHandlerResponse
-{
-
-}
+public interface IHandlerResponse { }

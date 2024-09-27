@@ -1,6 +1,3 @@
 ﻿namespace ContactTracking.Application.Features.Candidates;
 
-public interface IHandlerResponse
-{
-
-}
+public interface IHandlerResponse { }

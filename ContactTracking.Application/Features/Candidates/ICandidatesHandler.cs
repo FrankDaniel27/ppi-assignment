@@ -6,5 +6,5 @@ public interface ICandidatesHandler
 {
     Task<HandlerResponse> GetCandidates();
 
-    Task<bool> AddCandidate(Person person);
+    bool AddCandidate(Person person);
 }
