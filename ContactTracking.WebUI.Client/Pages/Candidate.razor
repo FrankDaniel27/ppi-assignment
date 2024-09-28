@@ -104,17 +104,20 @@
 
         if (isFormValid)
         {
-            // if (!Candidates.Any(z => z.Email.Equals(PersonModel.Email)))
-            // {
-            var person = PersonModel.DeepCopy();
-            var success = CandidatesHandler.AddCandidate(person);
-            if(success)
+            if(!Candidates.Any(p => p.FirstName.Equals(PersonModel.FirstName) && 
+                                    p.LastName.Equals(PersonModel.LastName) &&
+                                    p.Email.Equals(PersonModel.Email) &&
+                                    p.PhoneNumber.Equals(PersonModel.PhoneNumber) &&
+                                    p.ResidentialZipCode.Equals(PersonModel.ResidentialZipCode)))
             {
-                Candidates.Add(person);
-                GridCandidates.Rebind();
+                var person = PersonModel.DeepCopy();
+                var success = CandidatesHandler.AddCandidate(person);
+                if(success)
+                {
+                    Candidates = (await CandidatesHandler.GetCandidates()).Candidates;
+                    GridCandidates.Rebind();
+                }                
             }
-                
-            // }
         }
     }
 
